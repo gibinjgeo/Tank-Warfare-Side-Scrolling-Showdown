@@ -66,11 +66,11 @@ class Player(pygame.sprite.Sprite):
         # Load the tank image
         self.original_image = pygame.image.load("tank.png").convert_alpha()
         # Scale the tank image while maintaining aspect ratio
-        self.image = self.scale_image(self.original_image, (50, 50))
+        self.image = self.scale_image(self.original_image, (100, 100))
         self.rect = self.image.get_rect()
         self.rect.center = (100, SCREEN_HEIGHT - 70)
         self.speed_x = 5
-        self.jump_speed = 15
+        self.jump_speed = 20  # Higher jump speed
         self.gravity = 1
         self.vel_y = 0
         self.health = 100
@@ -119,7 +119,7 @@ class Projectile(pygame.sprite.Sprite):
         # Load the projectile image
         self.original_image = pygame.image.load("projectile.png").convert_alpha()
         # Scale the projectile image while maintaining aspect ratio
-        self.image = self.scale_image(self.original_image, (20, 10))  # Adjust size as needed
+        self.image = self.scale_image(self.original_image, (40, 20))  # Adjust size as needed
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
         self.speed_x = 10
@@ -147,7 +147,7 @@ class Enemy(pygame.sprite.Sprite):
         # Load the enemy image
         self.original_image = pygame.image.load("enemy.png").convert_alpha()
         # Scale the enemy image while maintaining aspect ratio
-        self.image = self.scale_image(self.original_image, (40, 40))
+        self.image = self.scale_image(self.original_image, (70, 70))
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(SCREEN_WIDTH + 20, SCREEN_WIDTH + 100)
         self.rect.y = SCREEN_HEIGHT - self.rect.height - 20
@@ -181,6 +181,14 @@ def draw_text(player_name, score, lives):
     text = f"Player: {player_name} | Score: {score} | Lives: {lives}"
     text_obj = font.render(text, True, BLACK)
     screen.blit(text_obj, (10, 10))
+
+# Game over display
+def show_game_over_message():
+    font = pygame.font.Font(None, 72)
+    game_over_text = font.render("You lost! Try again.", True, RED)
+    screen.blit(game_over_text, (SCREEN_WIDTH // 2 - game_over_text.get_width() // 2, SCREEN_HEIGHT // 2))
+    pygame.display.flip()
+    pygame.time.delay(3000)  # Wait for 3 seconds
 
 # Create sprite groups
 all_sprites = pygame.sprite.Group()
@@ -231,6 +239,7 @@ while running:
             player.lives -= 1
             player.health = 100
             if player.lives <= 0:
+                show_game_over_message()  # Show game over message
                 running = False  # Game over
 
     # Draw everything
