@@ -25,3 +25,4 @@ class Projectile(pygame.sprite.Sprite):
         # Remove projectile if off-screen
         if self.rect.left > SCREEN_WIDTH:
             self.kill()
+
